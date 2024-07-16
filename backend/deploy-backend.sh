@@ -1,21 +1,20 @@
 #!/bin/bash
+set -x
 
-# Exit on error
-set -e
+echo 'Logging in to Heroku...'
+heroku auth:token
 
-# Login to Heroku
-echo "Logging in to Heroku..."
-#echo "$HEROKU_API_KEY" | docker login --username=_ --password-stdin registry.heroku.com
+echo 'Logging in to Heroku Container Registry...'
+heroku container:login
 
-# Build and push Docker image to Heroku
-echo "Building Docker image..."
-#docker build -t registry.heroku.com/$HEROKU_APP_NAME/web .
+echo 'Building Docker image...'
+sudo docker build -t registry.heroku.com/ascent-travel/web .
 
-echo "Pushing Docker image to Heroku..."
-#docker push registry.heroku.com/$HEROKU_APP_NAME/web
+echo 'Pushing Docker image to Heroku...'
+sudo docker push registry.heroku.com/ascent-travel/web
 
-# Release the image
-#echo "Releasing the Docker image..."
-heroku container:release web --app $HEROKU_APP_NAME
+echo 'Releasing the Docker image...'
+heroku container:release web --app ascent-travel
 
-echo "Deployment to Heroku completed."
+echo 'Deployment completed.'
+set +x
